@@ -77,9 +77,10 @@ class EngagePod {
 
     /**
      * Get mailing templates
-     * 
+     * @param bool $isPrivate
+     * @return array
      */
-    public function getMailingTemplates($isPrivate = true) {
+    public function getMailingTemplates($isPrivate = false) {
         $data["Envelope"] = array(
             "Body" => array(
                 "GetMailingTemplates" => array(
