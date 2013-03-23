@@ -17,16 +17,89 @@ class EngagePod {
      */
     const VERSION = '0.0.2';
 
-    private $_baseUrl;
-    private $_session_encoding;
-    private $_jsessionid;
-    private $_username;
-    private $_password;
+    /**
+     * List type
+     * @var int
+     */
+    const LIST_TYPE_DATABASE = 0;
+
+    /**
+     * List type
+     * @var int
+     */
+    const LIST_TYPE_QUERIES = 1;
+
+    /**
+     * List type
+     * @var int
+     */
+    const LIST_TYPE_DB_QUERY = 2;
+
+    /**
+     * List type
+     * @var int
+     */
+    const LIST_TYPE_TEST = 5;
+
+    /**
+     * List type
+     * @var int
+     */
+    const LIST_TYPE_SEED = 6;
+
+    /**
+     * List type
+     * @var int
+     */
+    const LIST_TYPE_SUPPRESSION = 13;
+
+    /**
+     * List type
+     * @var int
+     */
+    const LIST_TYPE_TABLES = 15;
+
+    /**
+     * List type
+     * @var int
+     */
+    const LIST_TYPE_CONTACTS = 18;
+
+    /**
+     * The API base URL
+     * @var string
+     */
+    protected $_baseUrl;
+
+    /**
+     * Encoding type for login session
+     * @var string
+     */    
+    protected $_session_encoding;
+
+    /**
+     * Logged in session ID
+     * @var string
+     */
+    protected $_jsessionid;
+
+    /**
+     * Username to sign in as
+     * @var string
+     */
+    protected $_username;
+
+    /**
+     * Password used to sign in
+     * @var string
+     */
+    protected $_password;
 
     /**
      * Constructor
      * 
      * Sets $this->_baseUrl based on the engage server specified in config
+     * @param array $config
      */
     public function __construct($config) {
 
@@ -40,19 +113,12 @@ class EngagePod {
     /**
      * Fetches the contents of a list
      * 
-     * $listType can be one of:
-     *
-     * 0 - Databases
-     * 1 - Queries
-     * 2 - Both Databases and Queries
-     * 5 - Test Lists
-     * 6 - Seed Lists
-     * 13 - Suppression Lists
-     * 15 - Relational Tables
-     * 18 - Contact Lists
-     *
+     * @param int $listType
+     * @param bool $isPrivate
+     * @param int $folder
+     * @return array
      */
-    public function getLists($listType = 2, $isPrivate = true, $folder = null) {
+    public function getLists($listType = self::LIST_TYPE_DB_QUERY, $isPrivate = false, $folder = null) {
         $data["Envelope"] = array(
             "Body" => array(
                 "GetLists" => array(
