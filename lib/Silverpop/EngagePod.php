@@ -261,7 +261,7 @@ class EngagePod {
     }
     
     /**
-     * Add a contact to a list
+     * Add a contact to a DATABASE
      * 
      */
     public function addContact($databaseID, $updateIfFound, $columns) {
@@ -289,6 +289,37 @@ class EngagePod {
             }
         } else {
             throw new \Exception("AddRecipient Error: ".$this->_getErrorFromResponse($response));
+        }
+    }
+    
+    /**
+     * Adds a contact to a contact list
+     * @param int $listId
+     * @param int $contactId
+     * @param array $columns
+     */
+    public function addContactToContactList( $listId, $contactId, $columns = array() )
+    {
+        $data["Envelope"] = array(
+            "Body" => array(
+                "AddContactToContactList" => array(
+                    "CONTACT_LIST_ID" => $listId,
+                    "CONTACT_ID" => $contactId
+                ),
+            ),
+        );
+        if (! empty( $columns ) ) {
+            $data["Envelope"]["Body"]["AddContactToContactList"]["COLUMN"] = array();
+            foreach ( $columns as $key => $value ) {
+                $data["Envelope"]["Body"]["AddContactToContactList"]["COLUMN"][$key] = $value;
+            }
+        }
+        $response = $this->_request($data);
+        $result = $response["Envelope"]["Body"]["RESULT"];
+        if ($this->_isSuccess($result)) {
+            return true;
+        } else {
+            throw new \Exception("AddContactToContactList Error: ".$this->_getErrorFromResponse($response));
         }
     }
 
